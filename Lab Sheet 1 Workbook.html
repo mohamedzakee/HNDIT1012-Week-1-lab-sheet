@@ -1,0 +1,646 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Lab Sheet 1 Workbook</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a lab workbook — task list on the left; each task has three tabs (Design · Code · Test) beside a live, working copy of the target form. */
+:root{
+  --paper:#EEF3F2; --panel:#FFFFFF; --ink:#13231F; --muted:#526661; --line:#D3DFDC;
+  --accent:#0B7A73; --accent-ink:#FFFFFF; --accent-soft:#DDF1EE;
+  --hi:#E09A1A; --hi-soft:#FFF1D1; --ok:#18804E; --ok-soft:#DDF3E6; --bad:#BD3A2F; --bad-soft:#FBE2DE;
+  --code-bg:#0E1B1A; --code-ink:#DCE8E5; --code-dim:#7E9792;
+  --tk:#7FB8FF; --ts:#F2C27B; --tn:#B9E58A; --tt:#6FD8C8; --tc:#7B9590;
+  --win:#F0F0F0; --win-ink:#1B1F24; --win-line:#A9B1BA; --win-title:#FFFFFF; --win-field:#FFFFFF;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",Consolas,"Courier New",monospace;
+  --f-win:"Segoe UI",Tahoma,Arial,sans-serif;
+  --scale:1;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0C1514; --panel:#13201E; --ink:#E3EEEB; --muted:#93AAA5; --line:#243633;
+  --accent:#3FC2B6; --accent-ink:#06201D; --accent-soft:#143532;
+  --hi:#F0B240; --hi-soft:#3A2D10; --ok:#4CC38A; --ok-soft:#123326; --bad:#F0736A; --bad-soft:#3D1A17;
+  --code-bg:#08100F;
+  --win:#2A2F35; --win-ink:#E8EBEE; --win-line:#4B545E; --win-title:#1F2328; --win-field:#16191D; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --paper:#0C1514; --panel:#13201E; --ink:#E3EEEB; --muted:#93AAA5; --line:#243633;
+  --accent:#3FC2B6; --accent-ink:#06201D; --accent-soft:#143532;
+  --hi:#F0B240; --hi-soft:#3A2D10; --ok:#4CC38A; --ok-soft:#123326; --bad:#F0736A; --bad-soft:#3D1A17;
+  --code-bg:#08100F;
+  --win:#2A2F35; --win-ink:#E8EBEE; --win-line:#4B545E; --win-title:#1F2328; --win-field:#16191D; color-scheme:dark;}
+
+html{font-size:calc(16px * var(--scale))}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:1rem;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+*{box-sizing:border-box}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.15;margin:0}
+p{margin:0;max-width:70ch}
+code,.mono{font-family:var(--f-mono);font-size:.92em}
+.muted{color:var(--muted)}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line);
+  padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;min-width:0}
+.brand h1{font-size:1.25rem;font-weight:800;letter-spacing:-.01em}
+.brand .tag{font-family:var(--f-mono);font-size:.75rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.tools{margin-left:auto;display:flex;gap:6px;align-items:center}
+.overall{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 12px;cursor:pointer;line-height:1.3}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+.btn.small{padding:3px 9px;font-size:.85rem}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+.wrap{display:grid;grid-template-columns:250px minmax(0,1fr)}
+.rail{border-right:1px solid var(--line);background:var(--panel);padding:18px 12px 24px max(12px,env(safe-area-inset-left,0px))}
+.rail ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.rail a{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;padding:8px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:.95rem}
+.rail a .n{font-family:var(--f-mono);font-size:.75rem;color:var(--muted);padding-top:2px}
+.rail a .bar{grid-column:2;height:4px;border-radius:4px;background:var(--line);overflow:hidden}
+.rail a .bar i{display:block;height:100%;background:var(--ok);transition:width .3s}
+.rail a:hover{background:var(--accent-soft)}
+.rail a[aria-current="true"]{background:var(--accent);color:var(--accent-ink)}
+.rail a[aria-current="true"] .n{color:var(--accent-ink)}
+.rail a[aria-current="true"] .bar{background:rgba(255,255,255,.3)}
+.stage{padding-block:26px 40px;padding-left:max(16px,clamp(16px,3vw,40px));padding-right:max(16px,env(safe-area-inset-right,0px),clamp(16px,3vw,40px));min-width:0}
+.sec{display:grid;gap:20px;max-width:1200px}
+.eyebrow{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.sec h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-.02em;margin-top:4px}
+.lead{font-size:1.1rem;color:var(--muted);margin-top:8px}
+.brief{border-left:4px solid var(--accent);background:var(--panel);padding:12px 16px;border-radius:0 10px 10px 0;font-size:1.02rem}
+.brief b{font-family:var(--f-display)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+.grid2>*{min-width:0}
+.split{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:22px;align-items:start}
+.split>*{min-width:0}
+.stack{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h3{font-size:1.08rem;margin-bottom:8px}
+.sticky{position:sticky;top:96px}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:700;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.bad{background:var(--bad-soft);color:var(--bad)} .pill.hi{background:var(--hi-soft);color:var(--ink)}
+.msg{font-size:.9rem;padding:8px 12px;border-radius:8px}
+.msg.ok{background:var(--ok-soft);color:var(--ok)} .msg.bad{background:var(--bad-soft);color:var(--bad)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.04em;color:var(--muted);background:var(--paper);font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.nm{font-family:var(--f-mono);font-weight:600;color:var(--accent);white-space:nowrap}
+.hidenames td.nm span{filter:blur(6px);cursor:pointer;user-select:none}
+.hidenames td.nm span.shown{filter:none}
+.pager{display:flex;justify-content:space-between;gap:10px;max-width:1200px;margin-top:8px;flex-wrap:wrap}
+.key{font-family:var(--f-mono);font-size:.75rem;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;color:var(--muted)}
+
+/* tabs */
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);flex-wrap:wrap}
+.tabs button{border:0;background:transparent;padding:8px 14px;cursor:pointer;font-weight:700;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;display:flex;gap:8px;align-items:center}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs .cnt{font-family:var(--f-mono);font-size:.72rem;font-weight:600;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:0 7px}
+.tabs .cnt.full{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+
+/* steps */
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:4px;counter-reset:st}
+.steps li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start;padding:8px 10px;border-radius:10px;border:1px solid transparent}
+.steps li:hover{border-color:var(--line)}
+.steps input[type=checkbox]{width:20px;height:20px;margin:3px 0 0;accent-color:var(--ok);cursor:pointer}
+.steps li.done .txt{color:var(--muted)}
+.steps li.done .txt b{text-decoration:line-through;text-decoration-color:var(--ok)}
+.steps .txt small{display:block;color:var(--muted);font-size:.86rem;margin-top:2px}
+.steps .txt b{font-weight:700}
+
+/* code blanks */
+.code{background:var(--code-bg);color:var(--code-ink);border-radius:12px;font-family:var(--f-mono);font-size:.88rem;line-height:1.9;overflow-x:auto;padding:12px 0}
+.code .ln{display:block;padding:0 16px 0 0;white-space:pre}
+.code .ln::before{content:attr(data-n);display:inline-block;width:2.6em;padding-right:1em;text-align:right;color:var(--code-dim);opacity:.6}
+.k{color:var(--tk)} .s{color:var(--ts)} .nmb{color:var(--tn)} .t{color:var(--tt)} .c{color:var(--tc);font-style:italic}
+.blank{font-family:var(--f-mono);font-size:.88rem;background:#17302D;color:#FFE7B0;border:1px dashed #5F8C86;border-radius:4px;padding:0 4px;height:1.6em;vertical-align:baseline;min-width:3ch}
+.blank:focus{outline:none;border:1px solid var(--hi);box-shadow:0 0 0 2px rgba(224,154,26,.35)}
+.blank.right{border:1px solid #4CC38A;background:#123326;color:#CFF5E0}
+.blank.wrong{border:1px solid #F0736A;background:#3D1A17;color:#FFD8D3}
+.fb{font-size:.9rem}
+
+/* live form */
+.livehead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.winwrap{overflow-x:auto;padding:4px 4px 12px}
+.win{position:relative;background:var(--win);color:var(--win-ink);border:1px solid var(--win-line);box-shadow:0 8px 24px rgba(0,0,0,.12);font-family:var(--f-win);font-size:.84rem}
+.win .tb{height:30px;background:var(--win-title);border-bottom:1px solid var(--win-line);display:flex;align-items:center;justify-content:space-between;padding:0 4px 0 10px}
+.win .tb .wb{display:flex}
+.win .tb .wb span{padding:3px 10px;opacity:.75}
+.win .cl{position:relative}
+.win .c{position:absolute;font-family:var(--f-win);font-size:.84rem;color:var(--win-ink)}
+.win input.c,.win select.c{background:var(--win-field);border:1px solid var(--win-line);border-radius:0;padding:2px 5px;height:24px}
+.win input.c:focus,.win select.c:focus{outline:2px solid var(--accent);outline-offset:0;box-shadow:none}
+.win button.c{background:var(--win-title);border:1px solid var(--win-line);border-radius:2px;cursor:pointer;padding:0 6px;color:var(--win-ink)}
+.win button.c:hover{border-color:var(--accent);background:var(--accent-soft)}
+.win button.c:active{transform:translateY(1px)}
+.win .lst{background:var(--win-field);border:1px solid var(--win-line);overflow:auto;padding:2px 4px;font-size:.8rem}
+.win .lst div{white-space:pre}
+.win .lst.mono{font-family:"Courier New",Consolas,monospace;font-size:.78rem}
+.win label.c{display:flex;gap:5px;align-items:center;cursor:pointer}
+.win.navy{background:#000050;color:#fff}
+.win.navy .c.lab{color:#fff}
+.win .res{background:#B0C4DE;color:#13202B;border:2px inset #C9D3DE;font-size:1.15rem;padding:0 6px;display:flex;align-items:center}
+.closed{display:grid;place-items:center;gap:10px;padding:40px 20px;text-align:center;color:var(--muted);border:2px dashed var(--line);border-radius:10px}
+.dlg{position:absolute;inset:30px 0 0 0;display:grid;place-items:center;background:rgba(0,0,0,.18);z-index:3}
+.dlg>div{background:var(--win-title);color:var(--win-ink);border:1px solid var(--win-line);box-shadow:0 10px 26px rgba(0,0,0,.3);min-width:230px;max-width:92%;display:grid}
+.dlg .dt{padding:6px 10px;border-bottom:1px solid var(--win-line);font-size:.8rem}
+.dlg .db{padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.dlg .db .ic{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;flex:none}
+.dlg .ic.i{background:#2B6CD0} .dlg .ic.x{background:#C42B1C}
+.dlg .df{padding:8px 12px;display:flex;justify-content:flex-end;gap:6px;background:var(--win)}
+.dlg .crash{font-family:var(--f-mono);font-size:.74rem;white-space:pre-wrap;max-width:360px}
+.ctlbadge{position:absolute;font-family:var(--f-mono);font-size:.66rem;background:var(--hi);color:#1b1300;padding:0 4px;border-radius:3px;pointer-events:none;transform:translateY(-100%);z-index:2;white-space:nowrap}
+.win:not(.showNames) .ctlbadge{display:none}
+
+/* tests */
+.tests td:first-child{width:34px}
+.tests td .btn{white-space:nowrap}
+.win,.win *{font-style:normal}
+.tests input[type=checkbox]{width:20px;height:20px;accent-color:var(--ok);cursor:pointer}
+.tests tr.done td{background:var(--ok-soft)}
+
+/* overview */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.tcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:10px;cursor:pointer;text-align:left}
+.tcard:hover{border-color:var(--accent)}
+.tcard .k2{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tcard b{font-family:var(--f-display);font-size:1.15rem}
+.meter{height:8px;background:var(--line);border-radius:8px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--ok);transition:width .3s}
+.pct{font-family:var(--f-mono);font-size:.82rem;color:var(--muted)}
+.prefix td:first-child{font-family:var(--f-mono);font-weight:700;color:var(--accent)}
+.corr{background:var(--hi-soft)}
+ul.tight{margin:0;padding-left:1.2em;display:grid;gap:6px}
+
+@media (max-width:1050px){ .split{grid-template-columns:minmax(0,1fr)} .sticky{position:static} }
+@media (max-width:900px){
+  .wrap{grid-template-columns:minmax(0,1fr)}
+  .rail{border-right:0;border-bottom:1px solid var(--line);padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));overflow-x:auto}
+  .rail ol{display:flex;gap:4px;width:max-content}
+  .rail a{white-space:nowrap;padding:6px 10px}
+  .grid2{grid-template-columns:minmax(0,1fr)}
+  .stage{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+}
+@media (max-width:560px){ .brand .tag,.overall{display:none} }
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header class="top">
+  <div class="brand"><h1>Lab Sheet 1 Workbook</h1><span class="tag">HNDIT1012 Visual Application Programming · Week 1</span></div>
+  <div class="tools"><span class="overall" id="overall"></span>
+    <button class="btn small" id="fontDown" title="Smaller text">A−</button><button class="btn small" id="fontUp" title="Larger text">A+</button></div>
+</header>
+
+<div class="wrap">
+  <aside class="rail"><nav><ol id="nav"></ol></nav></aside>
+  <main class="stage" id="stage"></main>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const KW=new Set("using namespace class static void public private partial return if else for while new int double decimal string char bool true false var this null object".split(" "));
+function hl(src){ const re=/(\/\/[^\n]*)|("(?:[^"\\]|\\.)*")|(\b\d+(?:\.\d+)?\b)|(\b[A-Za-z_][A-Za-z0-9_]*\b)/g; let out="",last=0,m;
+  while((m=re.exec(src))){ out+=esc(src.slice(last,m.index));
+    if(m[1]) out+=`<span class="c">${esc(m[1])}</span>`; else if(m[2]) out+=`<span class="s">${esc(m[2])}</span>`; else if(m[3]) out+=`<span class="nmb">${m[3]}</span>`;
+    else { const w=m[4]; out+=KW.has(w)?`<span class="k">${w}</span>`:(/^[A-Z]/.test(w)?`<span class="t">${w}</span>`:w); } last=re.lastIndex; }
+  return out+esc(src.slice(last)); }
+
+/* ---------- saved progress (this browser only) ---------- */
+let P={steps:{},tests:{},blanks:{}};
+try{ const s=JSON.parse(localStorage.getItem("lab1wb")||"null"); if(s&&s.steps) P=Object.assign(P,s); }catch(e){}
+const save=()=>{ try{localStorage.setItem("lab1wb",JSON.stringify(P));}catch(e){} };
+
+/* ================= DATA ================= */
+const T={};
+T.task1={num:"Task 1",title:"Show Name and Clear",short:"Show Name",proj:"ShowNameApp",
+ brief:"Create a form and add two buttons and a label. When the <b>Show Name</b> button is clicked, show your name on the label. When the <b>Clear</b> button is clicked, delete the name.",
+ props:[["Form","frmShowName","Show Name","Size about 360 × 200"],["Button","btnShowName","Show Name",""],["Button","btnClear","Clear",""],["Label","lblName","(empty)","AutoSize = False, wide; Font size 14"]],
+ steps:[
+  ["Create the project","File → New → Project → <b>Windows Forms App (.NET Framework)</b>, C#. Name it <code>ShowNameApp</code>."],
+  ["Set up the form","Click the empty form. In Properties set <b>(Name)</b> = <code>frmShowName</code> and <b>Text</b> = <code>Show Name</code>."],
+  ["Add the controls","From the Toolbox drag two <b>Buttons</b> and one <b>Label</b> onto the form."],
+  ["Name every control","Use the properties table: set <b>(Name)</b> and <b>Text</b> of each control <i>before</i> double-clicking anything."],
+  ["Make the label easy to read","Label: AutoSize = False, drag it wider, Font size 14. Delete its Text so it starts empty."],
+  ["Code the Show Name button","Double-click <code>btnShowName</code>. Visual Studio creates <code>btnShowName_Click</code>. Fill it in (Code tab)."],
+  ["Code the Clear button","Double-click <code>btnClear</code> and write its handler."],
+  ["Run and test","Press <b>F5</b> and work through the Test tab."]],
+ code:[
+  "private void btnShowName_Click(object sender, EventArgs e)","{",
+  '    {{lblName.Text}} = "Your Name";   // type your own name here',"}","",
+  "private void btnClear_Click(object sender, EventArgs e)","{",
+  "    lblName.Text = {{\"\"|string.Empty}};","}"],
+ hints:["Which property of lblName changes what the user sees? Write it as control.Property.","An empty string is two double quotes with nothing between them."],
+ tests:[["Click <b>Show Name</b>","Your name appears on the label","show"],["Click <b>Clear</b>","The label becomes empty","clear"],["Click <b>Clear</b> twice, then <b>Show Name</b>","No error; the name appears again","again"]]
+};
+T.calc={num:"Exercise 1",title:"Small calculator",short:"Calculator",proj:"CalculatorApp",
+ brief:"Create a small calculator. The user types two numbers; the <b>/ x - +</b> buttons show the answer in Result, <b>Clear</b> empties everything and <b>Exit</b> closes the program. Give every object a suitable name.",
+ props:[["Form","frmCalculator","Calculator","FormBorderStyle = FixedDialog (optional)"],["Label","lblNumber1","Number 1",""],["Label","lblNumber2","Number 2",""],["Label","lblResultCaption","Result",""],
+  ["TextBox","txtNumber1","",""],["TextBox","txtNumber2","",""],["Label","lblResult","(empty)","AutoSize = False; BorderStyle = Fixed3D; BackColor = LightSteelBlue; Font 14"],
+  ["Button","btnDivide","/",""],["Button","btnMultiply","x",""],["Button","btnSubtract","-",""],["Button","btnAdd","+",""],["Button","btnClear","Clear",""],["Button","btnExit","Exit",""]],
+ steps:[
+  ["Create the project","Windows Forms App (.NET Framework), C#, named <code>CalculatorApp</code>."],
+  ["Set up the form","(Name) <code>frmCalculator</code>, Text <code>Calculator</code>."],
+  ["Add three caption labels","Number 1, Number 2 and Result, down the left side."],
+  ["Add two TextBoxes","<code>txtNumber1</code> and <code>txtNumber2</code>, beside the first two labels."],
+  ["Add the result label","<code>lblResult</code>: AutoSize = False, BorderStyle = Fixed3D, BackColor = LightSteelBlue, Font size 14."],
+  ["Add six buttons in a row","Select all six, then <b>Format → Make Same Size → Both</b> and <b>Format → Horizontal Spacing → Remove</b> to join them like the picture."],
+  ["Name everything","Use the properties table. Rename before you double-click."],
+  ["Code + - x /","Double-click each operator button. Convert the TextBox text to numbers first (Code tab)."],
+  ["Code Clear and Exit","Clear empties both boxes and the result; Exit closes the form."],
+  ["Run and test","F5, then work through every row of the Test tab."]],
+ code:[
+  "private void btnAdd_Click(object sender, EventArgs e)","{",
+  "    double n1 = {{Convert.ToDouble|double.Parse}}(txtNumber1.Text);",
+  "    double n2 = Convert.ToDouble({{txtNumber2.Text}});",
+  "    lblResult.Text = (n1 {{+}} n2).ToString();","}","",
+  "// btnSubtract_Click and btnMultiply_Click are the same, with - and *","",
+  "private void btnDivide_Click(object sender, EventArgs e)","{",
+  "    double n1 = Convert.ToDouble(txtNumber1.Text);",
+  "    double n2 = Convert.ToDouble(txtNumber2.Text);",
+  "    if (n2 {{==}} 0)","    {",
+  '        MessageBox.Show("Cannot divide by zero.");',
+  "        {{return}};   // stop here","    }",
+  "    lblResult.Text = (n1 / n2).{{ToString}}();","}","",
+  "private void btnClear_Click(object sender, EventArgs e)","{",
+  "    txtNumber1.{{Clear}}();","    txtNumber2.Clear();",
+  '    lblResult.Text = "";',
+  "    txtNumber1.{{Focus}}();   // cursor back to the first box","}","",
+  "private void btnExit_Click(object sender, EventArgs e)","{",
+  "    {{this.Close|Close|Application.Exit}}();","}"],
+ hints:["Text in a TextBox is a string. Which method turns a string into a double?","The second number comes from the second TextBox's Text property.","The add operator.","Comparison uses two equals signs.","Which keyword leaves a method straight away?","Turns a number into text.","A TextBox method that empties it.","A method that puts the cursor in a control.","Closes the form."],
+ tests:[["87 + 78","165","a"],["87 - 78","9","s"],["12 x 3","36","m"],["7 / 2","3.5","d"],["5 / 0",'Message box: "Cannot divide by zero."',"z"],["2.5 + 1.25","3.75","dec"],["abc + 1","Program crashes with FormatException (expected for now)","bad"],["Clear","Both boxes and Result empty; cursor in Number 1","clr"],["Exit","The program closes","exit"]]
+};
+T.reg={num:"Exercise 2",title:"Registration form",short:"Registration",proj:"RegistrationApp",
+ brief:"Create the registration form. The user enters first name, last name, gender and course; <b>Register</b> shows the details in the box on the right and <b>Clear</b> resets the form. Give every object a suitable name. (The window in the lab sheet's picture is titled \"Calculator\"; title yours \"Registration\".)",
+ props:[["Form","frmRegistration","Registration",""],["Label","lblFirstName","First Name",""],["Label","lblLastName","Last Name",""],["Label","lblGender","Gender",""],["Label","lblCourse","Course",""],
+  ["TextBox","txtFirstName","",""],["TextBox","txtLastName","",""],["RadioButton","rdoMale","Male",""],["RadioButton","rdoFemale","Female",""],
+  ["ComboBox","cmbCourse","","DropDownStyle = DropDownList; Items: HNDIT, HNDA, HNDE"],["ListBox","lstDetails","","Large box on the right"],["Button","btnRegister","Register",""],["Button","btnClear","Clear",""]],
+ steps:[
+  ["Create the project","Windows Forms App (.NET Framework), C#, named <code>RegistrationApp</code>."],
+  ["Set up the form","(Name) <code>frmRegistration</code>, Text <code>Registration</code>. Make it about 650 × 380."],
+  ["Add four caption labels","First Name, Last Name, Gender, Course."],
+  ["Add two TextBoxes","<code>txtFirstName</code>, <code>txtLastName</code>."],
+  ["Add two RadioButtons","<code>rdoMale</code> (Text Male) and <code>rdoFemale</code> (Text Female). Only one can be selected at a time."],
+  ["Add the ComboBox","<code>cmbCourse</code>: DropDownStyle = <b>DropDownList</b> (users can't type). Click <b>Items → …</b> and enter HNDIT, HNDA, HNDE, one per line."],
+  ["Add the ListBox","<code>lstDetails</code>, the large box on the right."],
+  ["Add the two buttons","<code>btnRegister</code> and <code>btnClear</code>."],
+  ["Code Register","Read the inputs and add three lines to the ListBox (Code tab)."],
+  ["Code Clear","Empty the TextBoxes, untick the radios, clear the course and the list."],
+  ["Run and test","F5, then the Test tab."]],
+ code:[
+  "private void btnRegister_Click(object sender, EventArgs e)","{",
+  '    string gender = {{rdoMale}}.Checked ? "Male" : "Female";',"",
+  "    lstDetails.Items.{{Clear}}();   // remove the previous details",
+  '    lstDetails.Items.{{Add}}("Name   : " + txtFirstName.Text + " " + txtLastName.Text);',
+  '    lstDetails.Items.Add("Gender : " + gender);',
+  '    lstDetails.Items.Add("Course : " + {{cmbCourse}}.Text);',"}","",
+  "private void btnClear_Click(object sender, EventArgs e)","{",
+  "    txtFirstName.Clear();","    txtLastName.Clear();",
+  "    rdoMale.Checked = {{false}};","    rdoFemale.Checked = false;",
+  "    cmbCourse.SelectedIndex = {{-1}};   // nothing selected",
+  "    lstDetails.Items.Clear();","}"],
+ hints:["Which radio button do we test? Its Checked property is true or false.","A method of Items that empties the list.","A method of Items that adds one line.","The control that holds the course.","Untick: the opposite of true.","The index that means no item is selected."],
+ tests:[["Nimal · Perera · Male · HNDIT → Register","List shows Name : Nimal Perera, Gender : Male, Course : HNDIT","ok"],["Ayesha · Rinoza · Female · HNDA → Register","Gender : Female, Course : HNDA","f"],["Register twice with different names","Only the latest details are shown","twice"],["No gender selected → Register","Shows Female! The simple code can't tell. See the improvement note.","nog"],["Clear","Everything is empty, no radio ticked, no course","clr"]]
+};
+T.bill={num:"Exercise 3",title:"Shop bill",short:"Shop bill",proj:"ShopBillApp",
+ brief:"A small window calculates a shop bill. The user types the item name, unit price and quantity; <b>Enter</b> adds a line to the bill and updates the total. Create the form.",
+ props:[["Form","frmBill","Shop Bill","BackColor = Navy"],["Label","lblItemName","Item Name","ForeColor = White"],["Label","lblUnitPrice","Unit Price","ForeColor = White"],["Label","lblQuantity","Quantity","ForeColor = White"],
+  ["TextBox","txtItemName","",""],["TextBox","txtUnitPrice","",""],["TextBox","txtQuantity","",""],["Button","btnEnter","Enter",""],
+  ["Label","lblTotalCaption","Total","ForeColor = White; Font 14"],["Label","lblTotal","Rs0.00","ForeColor = White; Font 14"],["ListBox","lstBill","","Font = Courier New 9, so columns line up"]],
+ steps:[
+  ["Create the project","Windows Forms App (.NET Framework), C#, named <code>ShopBillApp</code>."],
+  ["Set up the form","(Name) <code>frmBill</code>, Text <code>Shop Bill</code>, BackColor <b>Navy</b> (Properties → BackColor → Web tab)."],
+  ["Add three caption labels","Item Name, Unit Price, Quantity. Set ForeColor = White so they show on navy."],
+  ["Add three TextBoxes","<code>txtItemName</code>, <code>txtUnitPrice</code>, <code>txtQuantity</code>."],
+  ["Add the Enter button","<code>btnEnter</code>. Tip: set the form's <b>AcceptButton</b> to btnEnter so pressing Enter clicks it."],
+  ["Add the total labels","<code>lblTotalCaption</code> (Total) and <code>lblTotal</code> (Rs0.00), white, Font size 14."],
+  ["Add the ListBox","<code>lstBill</code>, Font Courier New so the columns line up."],
+  ["Add the bill heading on Load","Double-click an empty part of the form to create <code>frmBill_Load</code>, and add the heading line there."],
+  ["Code Enter","Use a class-level <code>total</code> so it keeps its value between clicks (Code tab)."],
+  ["Run and test","F5, then the Test tab."]],
+ code:[
+  "public partial class frmBill : Form","{",
+  "    private {{decimal}} total = 0;   // class-level: keeps its value between clicks","",
+  "    public frmBill()","    {","        InitializeComponent();","    }","",
+  "    private void frmBill_Load(object sender, EventArgs e)","    {",
+  '        lstBill.Items.Add("Item Name   Unit Price   Qty    Sub Total");',"    }","",
+  "    private void btnEnter_Click(object sender, EventArgs e)","    {",
+  "        decimal price = {{Convert.ToDecimal|decimal.Parse}}(txtUnitPrice.Text);",
+  "        int qty = {{Convert.ToInt32|int.Parse}}(txtQuantity.Text);",
+  "        decimal subTotal = price {{*}} qty;",
+  "        total = total {{+}} subTotal;","",
+  "        lstBill.Items.Add(txtItemName.Text.PadRight(12) +",
+  '                          price.ToString("0.00").PadLeft(10) + " x " +',
+  '                          qty.ToString().PadRight(4) + " = Rs" +',
+  "                          subTotal.ToString({{\"0.00\"|\"F2\"|\"N2\"}}));",
+  '        lblTotal.Text = "Rs" + total.ToString("0.00");',"",
+  "        txtItemName.Clear();","        txtUnitPrice.Clear();","        txtQuantity.Clear();",
+  "        txtItemName.{{Focus}}();","    }","}"],
+ hints:["The best type for money (exact decimals).","Convert the price text to a decimal.","Convert the quantity text to an int.","Subtotal = price times quantity.","Add the subtotal to the running total.","A format string for two decimal places.","Put the cursor back in the first box."],
+ tests:[["Dhal · 60.00 · 5 → Enter","Line: Dhal 60.00 x 5 = Rs300.00 · Total Rs300.00","d1"],["then Sugar · 250 · 2 → Enter","New line Rs500.00 · Total Rs800.00","d2"],["then Rice · 185.50 · 3 → Enter","New line Rs556.50 · Total Rs1356.50","d3"],["Quantity typed as \"two\"","Program crashes with FormatException (expected for now)","bad"],["After each Enter","The three boxes are empty and the cursor is in Item Name","focus"]]
+};
+const TASKS=["task1","calc","reg","bill"];
+
+/* ================= helpers ================= */
+const blankCount=k=>T[k].code.join("\n").match(/\{\{/g).length;
+function blankAnswers(k){ return [...T[k].code.join("\n").matchAll(/\{\{(.*?)\}\}/g)].map(m=>m[1].split("|")); }
+const norm=s=>String(s||"").replace(/\s+/g,"").replace(/;$/,"");
+function blanksRight(k){ const a=blankAnswers(k), v=P.blanks[k]||[]; return a.filter((ans,i)=>ans.some(x=>norm(x)===norm(v[i]))).length; }
+function prog(k){ const t=T[k]; const s=t.steps.filter((_,i)=>P.steps[k+i]).length, te=t.tests.filter(x=>P.tests[k+x[2]]).length, b=blanksRight(k);
+  const tot=t.steps.length+t.tests.length+blankCount(k); return {s,te,b,pct:Math.round((s+te+b)/tot*100)}; }
+
+/* ================= sections ================= */
+const SECS=[{id:"start",name:"Start here",n:"00"},{id:"prefixes",name:"Naming prefixes",n:"01"},
+  ...TASKS.map((k,i)=>({id:k,name:T[k].num+": "+T[k].short,n:String(i+2).padStart(2,"0"),task:k})),{id:"finish",name:"Hand-in checklist",n:"06"}];
+let cur=0, tab={task1:"design",calc:"design",reg:"design",bill:"design"};
+function renderNav(){
+  $("#nav").innerHTML=SECS.map((s,i)=>`<li><a href="#${s.id}" data-i="${i}" aria-current="${i===cur}"><span class="n">${s.n}</span><span>${esc(s.name)}</span>${s.task?`<span class="bar"><i style="width:${prog(s.task).pct}%"></i></span>`:""}</a></li>`).join("");
+  $$("#nav a").forEach(a=>a.onclick=e=>{e.preventDefault();go(+a.dataset.i);});
+  const all=TASKS.map(prog); $("#overall").textContent=`Overall ${Math.round(all.reduce((a,p)=>a+p.pct,0)/all.length)}%`;
+}
+function go(i){ cur=Math.max(0,Math.min(SECS.length-1,i)); render(); try{history.replaceState(null,"","#"+SECS[cur].id);}catch(e){} window.scrollTo({top:0}); }
+function pager(){ return `<div class="pager"><button class="btn" id="prev" ${cur===0?"disabled":""}>← ${cur>0?esc(SECS[cur-1].name):"Previous"}</button><span class="muted" style="align-self:center;font-size:.85rem">Progress is saved in this browser</span><button class="btn primary" id="next" ${cur===SECS.length-1?"disabled":""}>${cur<SECS.length-1?esc(SECS[cur+1].name):"Next"} →</button></div>`; }
+
+function render(){
+  const s=SECS[cur]; let h="";
+  if(s.id==="start") h=startHTML(); else if(s.id==="prefixes") h=prefixHTML(); else if(s.id==="finish") h=finishHTML(); else h=taskHTML(s.task);
+  $("#stage").innerHTML=`<section class="sec">${h}</section>`+pager();
+  $("#prev").onclick=()=>go(cur-1); $("#next").onclick=()=>go(cur+1);
+  if(s.task) wireTask(s.task); else if(s.id==="start") wireStart(); else if(s.id==="finish") wireFinish();
+  renderNav();
+}
+
+/* ---------- start ---------- */
+function startHTML(){
+  return `<div><div class="eyebrow">Lab Sheet 1 · Week 1</div><h2>Your first Windows Forms apps</h2>
+  <p class="lead">Lab Sheet 1 has one task and three exercises. For each one you get a working copy of the finished form to try, build steps, a properties table, code to complete and tests to run on your own app.</p></div>
+  <div class="cards">${TASKS.map((k,i)=>{const p=prog(k);return `<button class="tcard" data-i="${i+2}"><span class="k2">${T[k].num}</span><b>${T[k].title}</b><span class="meter"><i style="width:${p.pct}%"></i></span><span class="pct">${p.pct}% · ${p.s}/${T[k].steps.length} steps · ${p.b}/${blankCount(k)} code · ${p.te}/${T[k].tests.length} tests</span></button>`;}).join("")}</div>
+  <div class="grid2">
+    <div class="card"><h3>Every project starts the same way</h3><ol class="tight">
+      <li>Open <b>Visual Studio 2022</b> → <b>Create a new project</b>.</li>
+      <li>Choose <b>Windows Forms App (.NET Framework)</b> with the <b>C#</b> tag.</li>
+      <li>Type the project name from the task and choose <b>Create</b>.</li>
+      <li>Open the <b>Toolbox</b> (Ctrl+Alt+X) and pin it. Keep <b>Properties</b> (F4) open.</li>
+      <li>Add controls, then set <b>(Name)</b> and <b>Text</b> <i>before</i> double-clicking.</li>
+      <li>Double-click a button to write its <code>_Click</code> code.</li>
+      <li>Press <b>F5</b> to run. Close the form to stop.</li></ol></div>
+    <div class="card"><h3>How each page works</h3><ul class="tight">
+      <li><b>Design</b>: build steps to tick off and the properties table. Hide the names to try naming them yourself first.</li>
+      <li><b>Code</b>: fill the blanks, then press Check. Hints are there if you get stuck.</li>
+      <li><b>Test</b>: run each test on <i>your</i> Visual Studio app and tick it when it matches. <b>Try it here</b> shows the expected result on the working form.</li>
+      <li>Progress is saved in this browser only.</li></ul>
+      <div class="row" style="margin-top:12px"><button class="btn small" id="resetAll">Reset all progress</button><span id="resetMsg" class="muted" style="font-size:.85rem"></span></div></div>
+  </div>`;
+}
+function wireStart(){ $$(".tcard").forEach(c=>c.onclick=()=>go(+c.dataset.i)); let armed=false;
+  $("#resetAll").onclick=()=>{ if(!armed){armed=true;$("#resetAll").textContent="Click again to confirm";$("#resetMsg").textContent="This clears every tick and answer.";return;} P={steps:{},tests:{},blanks:{}}; save(); render(); }; }
+
+/* ---------- prefixes ---------- */
+function prefixHTML(){
+  const rows=[["frm","Form","frmCalculator"],["btn","Button","btnClear"],["lbl","Label","lblResult"],["txt","TextBox","txtFirstName"],["rdo","RadioButton","rdoMale"],["cb / chk","CheckBox","cbEmail"],["cbl","CheckBoxList (web)",""],["lst","ListBox","lstBill"],["cmb","ComboBox (drop-down list)","cmbCourse"],["ddl","DropDownList (web)",""],["pnl","Panel","pnlButtons"],["img","Image / PictureBox","imgLogo"],["imb","ImageButton (web)",""],["hlk","HyperLink (web)",""],["lbtn","LinkButton (web)",""],["fu","FileUpload (web)",""],["hdn","HiddenField (web)",""],["mv","MultiView (web)",""],["dtg","DataGrid","dtgStudents",true],["dtl","DataList (web)",""],["rep","Repeater (web)",""],["rdl","RadioButtonList (web)",""],["phd","Placeholder (web)",""],["tbl","Table (web)",""],["gv","GridView (web)",""],["dtv","DetailsView (web)",""]];
+  return `<div><div class="eyebrow">Lab Sheet 1 · Prefixes used with controls</div><h2>Naming prefixes</h2>
+  <p class="lead">Give every form and control a <b>(Name)</b> made of a lowercase prefix plus a PascalCase word saying what it is for: <code>btnShowName</code>, <code>txtFirstName</code>. Your code becomes readable: <code>lblResult.Text</code> is obviously a label.</p></div>
+  <div class="grid2">
+    <div class="tbl-wrap"><table class="prefix"><thead><tr><th>Prefix</th><th>Control</th><th>Example</th></tr></thead><tbody>${rows.map(r=>`<tr class="${r[3]?"corr":""}"><td>${r[0]}</td><td>${r[1]}${r[3]?' <span class="pill hi">corrected</span>':""}</td><td class="mono">${r[2]}</td></tr>`).join("")}</tbody></table></div>
+    <div class="stack">
+      <div class="card"><h3>Notes on the lab sheet's table</h3><ul class="tight">
+        <li>The <b>DataGrid</b> row is printed the wrong way round. The prefix is <code>dtg</code>, the control is DataGrid.</li>
+        <li>Rows marked <i>(web)</i> are ASP.NET web controls. You won't find them in the Windows Forms Toolbox. Use <b>ComboBox</b> (<code>cmb</code>) instead of DropDownList and <b>LinkLabel</b> (<code>lnk</code>) instead of HyperLink.</li>
+        <li><code>chk</code> for CheckBox is also common. Pick one style and use it everywhere.</li></ul></div>
+      <div class="card"><h3>Good and bad names</h3>
+        <div class="tbl-wrap"><table><thead><tr><th>Bad</th><th>Why</th><th>Good</th></tr></thead><tbody>
+        <tr><td class="mono">button1</td><td>Says nothing about its job</td><td class="mono">btnAdd</td></tr>
+        <tr><td class="mono">txt1</td><td>Which box is it?</td><td class="mono">txtUnitPrice</td></tr>
+        <tr><td class="mono">BtnClear</td><td>Prefix must be lowercase</td><td class="mono">btnClear</td></tr>
+        <tr><td class="mono">lbl Total</td><td>No spaces allowed</td><td class="mono">lblTotal</td></tr>
+        <tr><td class="mono">clearButton</td><td>No prefix</td><td class="mono">btnClear</td></tr></tbody></table></div></div>
+    </div>
+  </div>`;
+}
+
+/* ---------- task page ---------- */
+function taskHTML(k){
+  const t=T[k], p=prog(k), bc=blankCount(k);
+  const cnt=(a,b)=>`<span class="cnt${a===b?" full":""}">${a}/${b}</span>`;
+  return `<div><div class="eyebrow">${t.num} · project ${t.proj}</div><h2>${t.title}</h2></div>
+  <div class="brief"><b>Lab sheet:</b> ${t.brief}</div>
+  <div class="split">
+    <div class="stack">
+      <div class="tabs" role="tablist">
+        <button role="tab" data-tab="design" aria-selected="${tab[k]==="design"}">1 · Design ${cnt(p.s,t.steps.length)}</button>
+        <button role="tab" data-tab="code" aria-selected="${tab[k]==="code"}">2 · Code ${cnt(p.b,bc)}</button>
+        <button role="tab" data-tab="test" aria-selected="${tab[k]==="test"}">3 · Test ${cnt(p.te,t.tests.length)}</button></div>
+      <div id="tabBody"></div>
+    </div>
+    <div class="stack sticky">
+      <div class="livehead"><div><div class="eyebrow">Working copy</div><div class="muted" style="font-size:.88rem">This is how your finished app should behave. Try it.</div></div>
+        <div class="row"><label class="row" style="gap:6px;font-size:.85rem"><input type="checkbox" id="showNames"> Show names</label><button class="btn small" id="restartLive">Restart app</button></div></div>
+      <div class="winwrap" id="live"></div>
+    </div>
+  </div>`;
+}
+function wireTask(k){
+  $$(".tabs button").forEach(b=>b.onclick=()=>{tab[k]=b.dataset.tab;render();});
+  const body=$("#tabBody"); const t=T[k];
+  if(tab[k]==="design"){
+    body.innerHTML=`<div class="card"><h3>Build steps</h3><ol class="steps">${t.steps.map((s,i)=>`<li class="${P.steps[k+i]?"done":""}"><input type="checkbox" id="st-${k}-${i}" data-key="${k+i}" ${P.steps[k+i]?"checked":""}><label class="txt" for="st-${k}-${i}"><b>${i+1}. ${s[0]}</b><small>${s[1]}</small></label></li>`).join("")}</ol></div>
+      <div class="card"><div class="row" style="justify-content:space-between;margin-bottom:8px"><h3 style="margin:0">Properties table</h3><label class="row" style="gap:6px;font-size:.85rem"><input type="checkbox" id="hideN"> Hide names (try first)</label></div>
+      <div class="tbl-wrap" id="propTbl"><table><thead><tr><th>Control</th><th>(Name)</th><th>Text</th><th>Other properties</th></tr></thead><tbody>${t.props.map(r=>`<tr><td>${r[0]}</td><td class="nm"><span>${r[1]}</span></td><td>${esc(r[2])}</td><td class="muted" style="font-size:.85rem">${esc(r[3])}</td></tr>`).join("")}</tbody></table></div>
+      <p class="muted" style="font-size:.85rem;margin-top:8px">Changing the form's (Name) also renames its class; Visual Studio updates <code>Program.cs</code> for you.</p></div>`;
+    $$(".steps input").forEach(c=>c.onchange=()=>{ P.steps[c.dataset.key]=c.checked; save(); c.closest("li").classList.toggle("done",c.checked); refreshCounts(k); });
+    $("#hideN").onchange=e=>{ $("#propTbl").classList.toggle("hidenames",e.target.checked); };
+    $$("#propTbl td.nm span").forEach(s=>s.onclick=()=>s.classList.add("shown"));
+  } else if(tab[k]==="code"){
+    const ans=blankAnswers(k), vals=P.blanks[k]||[]; let bi=0;
+    const lines=t.code.map((L,ln)=>{ let out="",last=0; const re=/\{\{(.*?)\}\}/g; let m;
+      while((m=re.exec(L))){ out+=hl(L.slice(last,m.index)); const a=ans[bi]; const w=Math.max(...a.map(x=>x.length))+2;
+        out+=`<input class="blank" data-b="${bi}" value="${esc(vals[bi]||"")}" style="width:${w}ch" spellcheck="false" autocomplete="off" aria-label="Blank ${bi+1}">`; bi++; last=re.lastIndex; }
+      out+=hl(L.slice(last)); return `<span class="ln" data-n="${ln+1}">${out||" "}</span>`; }).join("");
+    body.innerHTML=`<div class="row" style="justify-content:space-between"><p class="muted" style="font-size:.92rem">Fill each <span class="pill hi">blank</span>, then press Check. Type the same code into your Visual Studio project.</p></div>
+      <div class="code" id="codeBox">${lines}</div>
+      <div class="row"><button class="btn primary" id="chk">Check</button><button class="btn" id="hint">Hint</button><button class="btn" id="reveal">Show answers</button><button class="btn small" id="clr">Clear blanks</button></div>
+      <div class="fb" id="fb"></div>
+      <div class="card"><h3>Why it works</h3>${explainCode(k)}</div>`;
+    const inputs=$$("#codeBox .blank");
+    inputs.forEach(inp=>{ inp.addEventListener("input",()=>{ (P.blanks[k]=P.blanks[k]||[])[+inp.dataset.b]=inp.value; save(); inp.classList.remove("right","wrong"); });
+      inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); check(); } }); });
+    const check=()=>{ let r=0; inputs.forEach(inp=>{ const ok=ans[+inp.dataset.b].some(x=>norm(x)===norm(inp.value)); inp.classList.toggle("right",ok); inp.classList.toggle("wrong",!ok); if(ok) r++; });
+      $("#fb").innerHTML= r===inputs.length?`<div class="msg ok">All ${r} blanks correct. Now type it into Visual Studio and run it.</div>`:`<div class="msg bad">${r} of ${inputs.length} correct. Red blanks need another look.</div>`; refreshCounts(k); };
+    $("#chk").onclick=check;
+    $("#hint").onclick=()=>{ const i=inputs.findIndex(inp=>!ans[+inp.dataset.b].some(x=>norm(x)===norm(inp.value))); if(i<0){$("#fb").innerHTML='<div class="msg ok">Nothing left to hint. Press Check.</div>';return;} inputs[i].focus(); $("#fb").innerHTML=`<div class="msg" style="background:var(--hi-soft)"><b>Blank ${i+1}:</b> ${esc(t.hints[i]||"Look at the surrounding code.")}</div>`; };
+    $("#reveal").onclick=()=>{ inputs.forEach(inp=>{ inp.value=ans[+inp.dataset.b][0]; (P.blanks[k]=P.blanks[k]||[])[+inp.dataset.b]=inp.value; }); save(); check(); };
+    $("#clr").onclick=()=>{ P.blanks[k]=[]; save(); render(); };
+    if((P.blanks[k]||[]).some(v=>v)) check();
+  } else {
+    body.innerHTML=`<p class="muted" style="font-size:.92rem">Run each test on <b>your own app</b> in Visual Studio. Tick it when your app does the same. <b>Try it here</b> runs the test on the working copy.</p>
+      <div class="tbl-wrap"><table class="tests"><thead><tr><th>✓</th><th>Do this</th><th>Expected result</th><th></th></tr></thead><tbody>
+      ${t.tests.map(x=>`<tr class="${P.tests[k+x[2]]?"done":""}"><td><input type="checkbox" data-key="${k+x[2]}" ${P.tests[k+x[2]]?"checked":""} aria-label="Done"></td><td>${x[0]}</td><td>${esc(x[1])}</td><td><button class="btn small" data-t="${x[2]}">Try it here</button></td></tr>`).join("")}</tbody></table></div>
+      ${testNotes(k)}`;
+    $$(".tests input").forEach(c=>c.onchange=()=>{ P.tests[c.dataset.key]=c.checked; save(); c.closest("tr").classList.toggle("done",c.checked); refreshCounts(k); });
+    $$(".tests button").forEach(b=>b.onclick=()=>{ LIVE[k].test(b.dataset.t); });
+  }
+  LIVE[k].mount($("#live"));
+  $("#restartLive").onclick=()=>LIVE[k].mount($("#live"));
+  $("#showNames").onchange=e=>{ const w=$("#live .win"); if(w) w.classList.toggle("showNames",e.target.checked); };
+}
+function refreshCounts(k){ const t=T[k],p=prog(k),vals=[[p.s,t.steps.length],[p.b,blankCount(k)],[p.te,t.tests.length]];
+  $$(".tabs .cnt").forEach((c,i)=>{c.textContent=`${vals[i][0]}/${vals[i][1]}`;c.classList.toggle("full",vals[i][0]===vals[i][1]);}); renderNav(); }
+function explainCode(k){
+  const E={
+    task1:`<ul class="tight"><li><code>lblName.Text</code> is the label's Text property: what the user sees. Assigning to it changes the screen straight away.</li><li><code>""</code> is an empty string, so the label shows nothing.</li><li>The method names <code>btnShowName_Click</code> come from the control names. That's why you rename <i>before</i> double-clicking.</li></ul>`,
+    calc:`<ul class="tight"><li><code>TextBox.Text</code> is always a string. <code>"87" + "78"</code> would give <code>"8778"</code>, so convert first with <code>Convert.ToDouble</code>.</li><li><code>(n1 + n2).ToString()</code> turns the number back into text for the label.</li><li>Dividing a double by 0 gives ∞ rather than an error, so we check <code>n2 == 0</code> ourselves and <code>return</code> early.</li><li><code>this.Close()</code> closes the form; because it's the main form, the program ends.</li></ul>`,
+    reg:`<ul class="tight"><li><code>condition ? a : b</code> is a short if/else: if rdoMale is checked use "Male", otherwise "Female".</li><li><code>Items.Clear()</code> first, so pressing Register twice doesn't pile up old details.</li><li><code>SelectedIndex = -1</code> means "nothing selected" in a ComboBox or ListBox.</li></ul>`,
+    bill:`<ul class="tight"><li><code>total</code> is declared <b>outside</b> the method. A variable inside <code>btnEnter_Click</code> would be reset to 0 on every click.</li><li><code>decimal</code> is exact for money; <code>double</code> can give 0.30000000000000004.</li><li><code>ToString("0.00")</code> always shows two decimal places: 300 becomes 300.00.</li><li><code>PadRight</code>/<code>PadLeft</code> add spaces so the columns line up in a Courier New font.</li></ul>`};
+  return E[k];
+}
+function testNotes(k){
+  if(k==="calc") return `<div class="card"><h3>About the crash test</h3><p>With <code>Convert.ToDouble</code>, typing letters stops the program with a <b>FormatException</b>. That's expected this week. Later you'll use <code>double.TryParse</code>, which checks the text first. Switch the working copy to "with TryParse" to see the difference.</p></div>`;
+  if(k==="reg") return `<div class="card"><h3>Improve it: no gender selected</h3><p>The short code only checks <code>rdoMale</code>, so "nothing selected" shows Female. A better version:</p><div class="code" style="margin-top:8px">${['string gender = "Not selected";','if (rdoMale.Checked) gender = "Male";','else if (rdoFemale.Checked) gender = "Female";'].map((l,i)=>`<span class="ln" data-n="${i+1}">${hl(l)}</span>`).join("")}</div></div>`;
+  if(k==="bill") return `<div class="card"><h3>Totals check</h3><p>60.00 × 5 = 300.00 · 250 × 2 = 500.00 · 185.50 × 3 = 556.50. Running total: 300.00 → 800.00 → 1356.50.</p></div>`;
+  return "";
+}
+
+/* ---------- finish ---------- */
+function finishHTML(){
+  const items=[["All four projects build with 0 errors","Build → Rebuild Solution; check the Error List"],["Every form and control has a prefixed, meaningful (Name)","No button1, label1 or textBox1 left"],["Form titles (Text) are correct","Show Name, Calculator, Registration, Shop Bill"],["Every test in each Test tab passes","Including Clear and Exit"],["Code is tidy","Indented, one statement per line, no unused empty handlers"],["Project folders are named as in this workbook","ShowNameApp, CalculatorApp, RegistrationApp, ShopBillApp"]];
+  return `<div><div class="eyebrow">Before you finish</div><h2>Hand-in checklist</h2><p class="lead">Go through this list for all four projects before you show your work.</p></div>
+  <div class="grid2"><div class="card"><ol class="steps">${items.map((s,i)=>`<li class="${P.steps["fin"+i]?"done":""}"><input type="checkbox" id="fin${i}" data-key="fin${i}" ${P.steps["fin"+i]?"checked":""}><label class="txt" for="fin${i}"><b>${s[0]}</b><small>${s[1]}</small></label></li>`).join("")}</ol></div>
+  <div class="stack"><div class="card"><h3>Your progress</h3><div class="stack">${TASKS.map(k=>{const p=prog(k);return `<div><div class="row" style="justify-content:space-between"><span>${T[k].num}: ${T[k].title}</span><span class="pct">${p.pct}%</span></div><div class="meter"><i style="width:${p.pct}%"></i></div></div>`;}).join("")}</div></div>
+  <div class="card"><h3>Common errors this week</h3><div class="tbl-wrap"><table><thead><tr><th>You see</th><th>Fix</th></tr></thead><tbody>
+    <tr><td>Handler called <code>button1_Click</code></td><td>You double-clicked before renaming. Rename first next time.</td></tr>
+    <tr><td><code>'Form1' does not contain a definition for 'button1_Click'</code></td><td>You deleted a handler by hand. Double-click the error and delete the matching line in Form1.Designer.cs.</td></tr>
+    <tr><td><code>CS0103: The name 'lblname' does not exist</code></td><td>C# is case-sensitive. Match the (Name) exactly.</td></tr>
+    <tr><td><code>CS1002: ; expected</code></td><td>Every statement ends with a semicolon.</td></tr>
+    <tr><td>87 + 78 shows 8778</td><td>Convert the text to numbers before adding.</td></tr>
+    <tr><td>Total resets every time</td><td>Declare the total at class level, outside the method.</td></tr>
+  </tbody></table></div></div></div></div>`;
+}
+function wireFinish(){ $$(".steps input").forEach(c=>c.onchange=()=>{P.steps[c.dataset.key]=c.checked;save();c.closest("li").classList.toggle("done",c.checked);}); }
+
+/* ================= LIVE WORKING COPIES ================= */
+function winShell(title,w,h,cls){ return `<div class="win ${cls||""}" style="width:${w}px"><div class="tb"><span class="wt">${esc(title)}</span><span class="wb"><span>—</span><span>▢</span><span>✕</span></span></div><div class="cl" style="height:${h}px"></div></div>`; }
+const ctl=(tag,id,x,y,w,h,extra="",inner="")=>`<${tag} class="c ${extra}" id="${id}" style="left:${x}px;top:${y}px;${w?`width:${w}px;`:""}${h?`height:${h}px;`:""}">${inner}</${tag}>`+`<span class="ctlbadge" style="left:${x}px;top:${y}px">${id}</span>`;
+function dialog(root,title,text,kind){ const cl=root.querySelector(".win"); const d=document.createElement("div"); d.className="dlg";
+  d.innerHTML=`<div role="dialog" aria-label="${esc(title)}"><div class="dt">${esc(title)}</div><div class="db"><span class="ic ${kind==="x"?"x":"i"}">${kind==="x"?"✕":"i"}</span><div class="${kind==="x"?"crash":""}">${esc(text)}</div></div><div class="df">${kind==="x"?'<button class="btn small" data-a="quit">Quit</button>':'<button class="btn small" data-a="ok">OK</button>'}</div></div>`;
+  cl.appendChild(d); const b=d.querySelector("button"); b.focus();
+  return new Promise(res=>{ b.onclick=()=>{ d.remove(); res(b.dataset.a); }; }); }
+function closedState(root,msg,remount){ root.innerHTML=`<div class="closed"><div><b>${esc(msg)}</b></div><button class="btn small primary">Run again (F5)</button></div>`; root.querySelector("button").onclick=remount; }
+const g=(root,id)=>root.querySelector("#"+id);
+const crashMsg=(m)=>`Unhandled exception has occurred in your application.\n\nSystem.FormatException: ${m}`;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function flash(el){ if(!el) return; el.style.outline="3px solid var(--hi)"; await sleep(350); el.style.outline=""; }
+
+const LIVE={};
+/* Task 1 */
+LIVE.task1={root:null,mount(root){ this.root=root; root.innerHTML=winShell("Show Name",360,170);
+  const cl=root.querySelector(".cl"); cl.innerHTML=ctl("button","btnShowName",40,24,110,30,"","Show Name")+ctl("button","btnClear",170,24,90,30,"","Clear")+ctl("div","lblName",40,90,280,34,"lab","")+
+    `<label class="c" style="left:40px;top:140px;font-size:.72rem;opacity:.7;display:none"></label>`;
+  g(root,"lblName").style.fontSize="1.35rem";
+  g(root,"btnShowName").onclick=()=>{ g(root,"lblName").textContent="Your Name"; };
+  g(root,"btnClear").onclick=()=>{ g(root,"lblName").textContent=""; };
+  if($("#showNames")&&$("#showNames").checked) root.querySelector(".win").classList.add("showNames"); },
+ async test(t){ const r=this.root; this.mount(r); const B=id=>g(r,id);
+  if(t==="show"){ await flash(B("btnShowName")); B("btnShowName").click(); }
+  if(t==="clear"){ B("btnShowName").click(); await sleep(400); await flash(B("btnClear")); B("btnClear").click(); }
+  if(t==="again"){ B("btnClear").click(); B("btnClear").click(); await flash(B("btnShowName")); B("btnShowName").click(); } }};
+
+/* Calculator */
+LIVE.calc={root:null,tryParse:false,mount(root){ this.root=root; const self=this;
+  root.innerHTML=winShell("Calculator",340,190)+`<div class="row" style="margin-top:8px;font-size:.85rem"><span class="muted">Conversion:</span><select id="calcMode" style="width:auto"><option value="c">Convert.ToDouble (this week)</option><option value="t" ${this.tryParse?"selected":""}>double.TryParse (later)</option></select></div>`;
+  const cl=root.querySelector(".cl");
+  cl.innerHTML=ctl("div","lblNumber1",22,20,0,0,"lab","Number 1")+ctl("input","txtNumber1",130,16,130,0)+ctl("div","lblNumber2",22,60,0,0,"lab","Number 2")+ctl("input","txtNumber2",130,56,130,0)+
+    ctl("div","lblResultCaption",22,100,0,0,"lab","Result")+ctl("div","lblResult",130,94,130,30,"res","")+
+    ["btnDivide:/","btnMultiply:x","btnSubtract:-","btnAdd:+","btnClear:Clear","btnExit:Exit"].map((s,i)=>{const[id,tx]=s.split(":");return ctl("button",id,16+i*51,140,i>3?52:50,30,"",tx);}).join("");
+  g(root,"txtNumber1").outerHTML;
+  ["txtNumber1","txtNumber2"].forEach(id=>g(root,id).setAttribute("aria-label",id));
+  root.querySelector("#calcMode").onchange=e=>{self.tryParse=e.target.value==="t";};
+  const num=async(id)=>{ const s=g(root,id).value; const v=s.trim()===""?NaN:Number(s.trim().replace(/,/g,""));
+    if(isNaN(v)){ if(self.tryParse){ await dialog(root,"Calculator",`Please enter a valid number in ${id==="txtNumber1"?"Number 1":"Number 2"}.`,"i"); g(root,id).focus(); return null; }
+      await dialog(root,"Microsoft .NET Framework",crashMsg("Input string was not in a correct format.\n   at System.Convert.ToDouble(String value)\n   at "+"frmCalculator.btnClick"),"x"); closedState(root,"The program crashed and closed.",()=>self.mount(root)); return null; } return v; };
+  const fmt=x=>{ if(!isFinite(x)) return x>0?"∞":"-∞"; return String(+x.toPrecision(15)); };
+  const op=f=>async()=>{ const a=await num("txtNumber1"); if(a===null) return; const b=await num("txtNumber2"); if(b===null) return; const r=await f(a,b); if(r!==undefined) g(root,"lblResult").textContent=fmt(r); };
+  g(root,"btnAdd").onclick=op((a,b)=>a+b); g(root,"btnSubtract").onclick=op((a,b)=>a-b); g(root,"btnMultiply").onclick=op((a,b)=>a*b);
+  g(root,"btnDivide").onclick=op(async(a,b)=>{ if(b===0){ await dialog(root,"Calculator","Cannot divide by zero.","i"); return undefined; } return a/b; });
+  g(root,"btnClear").onclick=()=>{ g(root,"txtNumber1").value=""; g(root,"txtNumber2").value=""; g(root,"lblResult").textContent=""; g(root,"txtNumber1").focus(); };
+  g(root,"btnExit").onclick=()=>closedState(root,"The program has closed (this.Close()).",()=>self.mount(root));
+  if($("#showNames")&&$("#showNames").checked) root.querySelector(".win").classList.add("showNames"); },
+ async test(t){ const r=this.root; this.mount(r); const set=(a,b)=>{g(r,"txtNumber1").value=a;g(r,"txtNumber2").value=b;};
+  const press=async id=>{ await flash(g(r,id)); g(r,id).click(); };
+  const M={a:["87","78","btnAdd"],s:["87","78","btnSubtract"],m:["12","3","btnMultiply"],d:["7","2","btnDivide"],z:["5","0","btnDivide"],dec:["2.5","1.25","btnAdd"],bad:["abc","1","btnAdd"]};
+  if(M[t]){ set(M[t][0],M[t][1]); await sleep(250); await press(M[t][2]); }
+  if(t==="clr"){ set("87","78"); g(r,"btnAdd").click(); await sleep(500); await press("btnClear"); }
+  if(t==="exit"){ await press("btnExit"); } }};
+
+/* Registration */
+LIVE.reg={root:null,mount(root){ this.root=root; const self=this;
+  root.innerHTML=winShell("Registration",520,280);
+  const cl=root.querySelector(".cl");
+  cl.innerHTML=ctl("div","lblFirstName",16,30,0,0,"lab","First Name")+ctl("input","txtFirstName",110,26,140,0)+ctl("div","lblLastName",16,70,0,0,"lab","Last Name")+ctl("input","txtLastName",110,66,140,0)+
+   ctl("div","lblGender",16,116,0,0,"lab","Gender")+ctl("label","rdoMale",110,114,0,0,"",`<input type="radio" name="g" value="Male">Male`)+ctl("label","rdoFemale",180,114,0,0,"",`<input type="radio" name="g" value="Female">Female`)+
+   ctl("div","lblCourse",16,160,0,0,"lab","Course")+ctl("select","cmbCourse",110,156,140,0,"",`<option value=""></option><option>HNDIT</option><option>HNDA</option><option>HNDE</option>`)+
+   ctl("div","lstDetails",280,20,220,200,"lst","")+ctl("button","btnRegister",40,222,90,30,"","Register")+ctl("button","btnClear",146,222,80,30,"","Clear");
+  ["txtFirstName","txtLastName","cmbCourse"].forEach(id=>g(root,id).setAttribute("aria-label",id));
+  g(root,"btnRegister").onclick=()=>{ const male=g(root,"rdoMale").querySelector("input").checked; const gender=male?"Male":"Female";
+    g(root,"lstDetails").innerHTML=[`Name   : ${g(root,"txtFirstName").value} ${g(root,"txtLastName").value}`,`Gender : ${gender}`,`Course : ${g(root,"cmbCourse").value}`].map(l=>`<div>${esc(l)}</div>`).join(""); };
+  g(root,"btnClear").onclick=()=>{ g(root,"txtFirstName").value=""; g(root,"txtLastName").value=""; root.querySelectorAll("input[type=radio]").forEach(x=>x.checked=false); g(root,"cmbCourse").selectedIndex=0; g(root,"lstDetails").innerHTML=""; };
+  if($("#showNames")&&$("#showNames").checked) root.querySelector(".win").classList.add("showNames"); },
+ async test(t){ const r=this.root; this.mount(r); const fill=(f,l,gn,c)=>{ g(r,"txtFirstName").value=f; g(r,"txtLastName").value=l; r.querySelectorAll("input[type=radio]").forEach(x=>x.checked=x.value===gn); g(r,"cmbCourse").value=c; };
+  const press=async id=>{ await flash(g(r,id)); g(r,id).click(); };
+  if(t==="ok"){ fill("Nimal","Perera","Male","HNDIT"); await sleep(300); await press("btnRegister"); }
+  if(t==="f"){ fill("Ayesha","Rinoza","Female","HNDA"); await sleep(300); await press("btnRegister"); }
+  if(t==="twice"){ fill("Nimal","Perera","Male","HNDIT"); g(r,"btnRegister").click(); await sleep(700); fill("Kavin","Raj","Male","HNDE"); await sleep(300); await press("btnRegister"); }
+  if(t==="nog"){ fill("Sanjana","Rajan","","HNDIT"); await sleep(300); await press("btnRegister"); }
+  if(t==="clr"){ fill("Nimal","Perera","Male","HNDIT"); g(r,"btnRegister").click(); await sleep(600); await press("btnClear"); } }};
+
+/* Shop bill */
+LIVE.bill={root:null,total:0,mount(root){ this.root=root; const self=this; self.total=0;
+  root.innerHTML=winShell("Shop Bill",560,270,"navy");
+  const cl=root.querySelector(".cl");
+  cl.innerHTML=ctl("div","lblItemName",14,26,0,0,"lab","Item Name")+ctl("input","txtItemName",110,22,120,0)+ctl("div","lblUnitPrice",14,74,0,0,"lab","Unit Price")+ctl("input","txtUnitPrice",110,70,120,0)+
+   ctl("div","lblQuantity",14,122,0,0,"lab","Quantity")+ctl("input","txtQuantity",110,118,120,0)+ctl("button","btnEnter",110,160,80,26,"","Enter")+
+   ctl("div","lblTotalCaption",14,215,0,0,"lab","Total")+ctl("div","lblTotal",110,215,0,0,"lab","Rs0.00")+ctl("div","lstBill",250,20,295,232,"lst mono","");
+  ["lblTotalCaption","lblTotal"].forEach(id=>g(root,id).style.fontSize="1.3rem");
+  ["txtItemName","txtUnitPrice","txtQuantity"].forEach(id=>g(root,id).setAttribute("aria-label",id));
+  const add=l=>{ const d=document.createElement("div"); d.textContent=l; g(root,"lstBill").appendChild(d); };
+  add("Item Name   Unit Price   Qty    Sub Total");
+  const crash=async(m)=>{ await dialog(root,"Microsoft .NET Framework",crashMsg(m+"\n   at frmBill.btnEnter_Click"),"x"); closedState(root,"The program crashed and closed.",()=>self.mount(root)); };
+  const enter=async()=>{ const ps=g(root,"txtUnitPrice").value.trim(), qs=g(root,"txtQuantity").value.trim();
+    if(ps===""||isNaN(Number(ps))) return crash("Input string was not in a correct format.\n   at System.Convert.ToDecimal(String value)");
+    if(!/^-?\d+$/.test(qs)) return crash("Input string was not in a correct format.\n   at System.Convert.ToInt32(String value)");
+    const price=Math.round(Number(ps)*100), qty=parseInt(qs,10), sub=price*qty; self.total+=sub;
+    const f=c=>(c/100).toFixed(2);
+    add(g(root,"txtItemName").value.padEnd(12)+f(price).padStart(10)+" x "+String(qty).padEnd(4)+" = Rs"+f(sub));
+    g(root,"lblTotal").textContent="Rs"+f(self.total);
+    ["txtItemName","txtUnitPrice","txtQuantity"].forEach(id=>g(root,id).value=""); g(root,"txtItemName").focus(); };
+  g(root,"btnEnter").onclick=enter;
+  root.querySelector(".win").addEventListener("keydown",e=>{ if(e.key==="Enter"&&e.target.tagName==="INPUT"){ e.preventDefault(); enter(); } });
+  if($("#showNames")&&$("#showNames").checked) root.querySelector(".win").classList.add("showNames"); },
+ async test(t){ const r=this.root; this.mount(r); const fill=(a,b,c)=>{g(r,"txtItemName").value=a;g(r,"txtUnitPrice").value=b;g(r,"txtQuantity").value=c;};
+  const press=async()=>{ await flash(g(r,"btnEnter")); g(r,"btnEnter").click(); await sleep(200); };
+  const seq=[["Dhal","60.00","5"],["Sugar","250","2"],["Rice","185.50","3"]]; const n={d1:1,d2:2,d3:3,focus:1}[t];
+  if(n){ for(let i=0;i<n;i++){ fill(...seq[i]); await sleep(300); await press(); } }
+  if(t==="bad"){ fill("Dhal","60.00","two"); await sleep(300); await press(); } }};
+
+/* ================= boot ================= */
+let scale=1; try{scale=+localStorage.getItem("lab1Scale")||1;}catch(e){}
+const setScale=v=>{scale=Math.max(.8,Math.min(1.6,Math.round(v*10)/10));document.documentElement.style.setProperty("--scale",scale);try{localStorage.setItem("lab1Scale",scale);}catch(e){}};
+setScale(scale); $("#fontUp").onclick=()=>setScale(scale+.1); $("#fontDown").onclick=()=>setScale(scale-.1);
+document.addEventListener("keydown",e=>{ if(/INPUT|TEXTAREA|SELECT|BUTTON/.test(document.activeElement.tagName)&&document.activeElement.closest(".win,.code,.tests,.steps")) return; if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return; if(e.key==="ArrowRight") go(cur+1); if(e.key==="ArrowLeft") go(cur-1); });
+const fromHash=()=>SECS.findIndex(s=>s.id===(location.hash||"").slice(1));
+window.addEventListener("hashchange",()=>{const i=fromHash(); if(i>=0&&i!==cur) go(i);});
+cur=Math.max(0,fromHash()); render();
+})();
+</script>
+
+</body></html>
